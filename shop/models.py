@@ -30,6 +30,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'), null=False, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('category'), null=False, blank=False)
     price = models.PositiveBigIntegerField(verbose_name=_('price'), null=False, blank=False)
+    description = models.TextField(verbose_name=_('description'), null=True, blank=True)
     discount_type = models.PositiveSmallIntegerField(choices=choices, default=PERCENTAGE, verbose_name=_('discount type'))
     discount_value = models.PositiveBigIntegerField(null=True, blank=True, verbose_name=_('discount value'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
@@ -90,23 +91,9 @@ class ProductImage(models.Model):
         verbose_name = _('Products Image')
 
 
-class Attribute(models.Model):
+class ProductAttribute(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False, verbose_name=_('name'))
     value = models.CharField(max_length=100, null=False, blank=False, verbose_name=_('value'))
-    is_active = models.BooleanField(default=True, verbose_name=_('is active'))
-    created_time = models.DateTimeField(auto_now_add=True, verbose_name=_('created time'))
-    updated_time = models.DateTimeField(auto_now=True, verbose_name=_('updated time'))
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('Attribute')
-        verbose_name_plural = _('Attributes')
-
-
-class ProductAttribute(models.Model):
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE, related_name='products', verbose_name=_('attribute'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes', verbose_name=_('product'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
     created_time = models.DateTimeField(auto_now_add=True, verbose_name=_('created time'))
